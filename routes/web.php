@@ -6,6 +6,7 @@ use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'home'])->name('welcome');
+Route::get('/movie/{id}', [HomeController::class, 'movie'])->name('movie.detail');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

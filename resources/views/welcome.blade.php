@@ -59,29 +59,31 @@
                         <!-- Cinema Section -->
                         <section>
                             <h2 class="text-2xl font-semibold text-black dark:text-white mb-6">Our Cinemas!</h2>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 @forelse ($cinemas as $cinema)
-                                    <div class="max-w-sm rounded-lg shadow-lg bg-white dark:bg-gray-800">
-                                        <div class="px-6 py-4">
-                                            <h3 class="font-bold text-lg mb-2 text-gray-800 dark:text-gray-200">
-                                                {{ $cinema->title }}
-                                            </h3>
-                                            <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
-                                                {{ $cinema->description }}
-                                            </p>
-                                            <div class="grid">
-                                                @forelse ($cinema->auditorium as $auditorium)
-                                                    <p
-                                                        class="bg-blue-200 rounded-full px-3 py-1 text-xs font-semibold text-blue-700 mr-2 mb-2">
-                                                        {{ $auditorium->name }}
-                                                    </p>
-                                                @empty
-                                                    <span class="text-gray-500 dark:text-gray-400 text-sm">No
-                                                        auditoriums available</span>
-                                                @endforelse
-                                            </div>
+                                    <a href="#"
+                                        class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                                        <h1
+                                            class="mb-2 text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+                                            {{ $cinema->name }}</h1>
+                                        <h2 class="mb-2 text-l tracking-tight text-gray-900 dark:text-white">
+                                            {{ $cinema->city }}</h2>
+                                        <p class="font-normal text-gray-700 dark:text-gray-400">{{ $cinema->address }}
+                                        </p>
+                                        <p class="font-normal text-small text-gray-700 dark:text-gray-400">Auditorium:
+                                        </p>
+                                        <div class="flex flex-col">
+                                            @forelse ($cinema->auditorium as $auditorium)
+                                                <span
+                                                    class="bg-blue-100 text-blue-800 text-md font-medium my-1 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                                                    {{ $auditorium->name }}
+                                                </span>
+                                            @empty
+                                                <span class="text-gray-500 dark:text-gray-400 text-sm">No
+                                                    auditoriums available</span>
+                                            @endforelse
                                         </div>
-                                    </div>
+                                    </a>
                                 @empty
                                     <p class="text-gray-500 dark:text-gray-400">No cinemas available.</p>
                                 @endforelse
@@ -94,20 +96,41 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                                 @forelse ($promos as $promo)
                                     <div
-                                        class="max-w-sm rounded-lg overflow-hidden shadow-lg bg-white dark:bg-gray-800 hover:scale-105 transform transition-transform">
-                                        <img class="w-full h-48 object-cover" src="{{ $promo->image }}"
-                                            alt="{{ $promo->title }}">
-                                        <div class="px-6 py-4">
-                                            <h3 class="font-bold text-lg mb-2 text-gray-800 dark:text-gray-200">
-                                                {{ $promo->title }}
-                                            </h3>
-                                            <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
-                                                {{ $promo->description }}
+                                        class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                                        <img class="rounded-t-lg object-cover h-40 w-full" src="{{ $promo->image }}"
+                                            alt="{{ $promo->name }}" />
+                                        <div class="p-5">
+                                            <h5
+                                                class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                                {{ $promo->name }}</h5>
+                                            <p class="mb-4 font-normal text-gray-700 dark:text-gray-400">
+                                                {{ $promo->description }}</p>
+                                            <p class="mb-4">
+                                                <span
+                                                    class="bg-blue-100 text-blue-800 text-md font-medium my-1 px-2.5 py-0.5 rounded-full capitalize dark:bg-blue-900 dark:text-blue-300">
+                                                    {{ $promo->type }}
+                                                </span>
                                             </p>
-                                            <span
-                                                class="inline-block bg-yellow-200 rounded-full px-3 py-1 text-xs font-semibold text-yellow-700">
-                                                {{ $promo->type }}
-                                            </span>
+                                            <p class="mb-2">
+                                                Usage Date:
+                                            </p>
+                                            <p class="mb-4">
+                                                <span
+                                                    class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                                                    {{ $promo->start_date }}
+                                                </span>
+                                                until
+                                                <span
+                                                    class="bg-yellow-100 text-yellow-800 text-sm font-medium m-1 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">
+                                                    {{ $promo->end_date }}
+                                                </span>
+                                            </p>
+                                            <p class="mb-2">
+                                                Code:
+                                            </p>
+                                            <input type="text"
+                                                class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                value="{{ $promo->code }}" readonly>
                                         </div>
                                     </div>
                                 @empty
@@ -118,12 +141,12 @@
 
                         <!-- Movies Section -->
                         <section>
-                            <h2 class="text-2xl font-semibold text-black dark:text-white mb-6">Movies</h2>
+                            <h2 class="text-2xl font-semibold text-black dark:text-white mb-6">Now Playing!</h2>
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                                 @forelse ($movies as $movie)
-                                    <div
+                                    <a href={{ route('movie.detail', $movie->id) }}
                                         class="max-w-sm rounded-lg overflow-hidden shadow-lg bg-white dark:bg-gray-800 hover:scale-105 transform transition-transform">
-                                        <img class="w-full h-48 object-cover"
+                                        <img class="w-full h-60 object-cover"
                                             src="https://image.tmdb.org/t/p/original/{{ $movie->poster_path }}"
                                             alt="{{ $movie->title }}">
                                         <div class="px-6 py-4">
@@ -136,7 +159,7 @@
                                             <div class="flex flex-wrap">
                                                 @forelse ($movie->genre as $genre)
                                                     <span
-                                                        class="inline-block bg-red-200 rounded-full px-3 py-1 text-xs font-semibold text-red-700 mr-2 mb-2">
+                                                        class="bg-purple-100 text-purple-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-purple-900 dark:text-purple-300">
                                                         {{ $genre->name }}
                                                     </span>
                                                 @empty
@@ -145,7 +168,7 @@
                                                 @endforelse
                                             </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 @empty
                                     <p class="text-gray-500 dark:text-gray-400">No movies available.</p>
                                 @endforelse
