@@ -61,7 +61,7 @@
                             <h2 class="text-2xl font-semibold text-black dark:text-white mb-6">Our Cinemas!</h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 @forelse ($cinemas as $cinema)
-                                    <a href="#"
+                                    <a href={{ route('cinema.detail', $cinema->id) }}
                                         class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                                         <h1
                                             class="mb-2 text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
@@ -147,7 +147,7 @@
                                     <a href={{ route('movie.detail', $movie->id) }}
                                         class="max-w-sm rounded-lg overflow-hidden shadow-lg bg-white dark:bg-gray-800 hover:scale-105 transform transition-transform">
                                         <img class="w-full h-60 object-cover"
-                                            src="https://image.tmdb.org/t/p/original/{{ $movie->poster_path }}"
+                                            src="{{ env('TMDB_IMG_PATH') }}{{ $movie->poster_path }}"
                                             alt="{{ $movie->title }}">
                                         <div class="px-6 py-4">
                                             <h3 class="font-bold text-lg mb-2 text-gray-800 dark:text-gray-200">
