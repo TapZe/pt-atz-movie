@@ -11,9 +11,10 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('auditoria', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('name');
-            $table->foreignId('cinema_id')->constrained()->onDelete('cascade');
+            $table->uuid('cinema_id');
+            $table->foreign('cinema_id')->references('id')->on('cinemas')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

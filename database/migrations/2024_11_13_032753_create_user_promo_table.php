@@ -13,7 +13,8 @@ return new class extends Migration {
         Schema::create('user_promo', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('promo_id')->constrained()->onDelete('cascade');
+            $table->uuid('promo_id');
+            $table->foreign('promo_id')->references('id')->on('promos')->onDelete('cascade');
             $table->boolean('used')->default(false);
             $table->timestamps();
         });

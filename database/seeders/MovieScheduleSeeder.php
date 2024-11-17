@@ -6,6 +6,7 @@ use App\Models\Auditorium;
 use App\Models\Cinema;
 use App\Models\Movie;
 use App\Models\MovieSchedule;
+use App\Models\Price;
 use App\Models\Seat;
 use DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -25,6 +26,7 @@ class MovieScheduleSeeder extends Seeder
         $movieCount = count($movies);
         $gap = 30; // Gap time in minutes
         $seats = Seat::all();
+        $prices = Price::all();
 
         DB::beginTransaction();
         try {
@@ -51,8 +53,9 @@ class MovieScheduleSeeder extends Seeder
                     while ($currentOpenTime->copy()->addMinutes($movies[$movieIndex]->runtime) <= $closeTime) {
                         // End time of the show and round it to the next five minutes
                         $showEnd = $this->roundToNextFiveMinutes($currentOpenTime->copy()->addMinutes($movies[$movieIndex]->runtime));
-                        // Determine price based on weekday/weekend (this is the default id)
-                        $priceId = $date->isWeekday() ? 1 : 2;
+
+                        // Determine price based on weekday/weekend (this is the default)
+                        $priceId = $prices[(int) $date->isWeekday()]->id;
 
                         $created = MovieSchedule::create([
                             'date' => $date->toDateString(),

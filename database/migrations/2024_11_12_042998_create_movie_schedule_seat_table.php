@@ -12,8 +12,10 @@ return new class extends Migration {
     {
         Schema::create('movie_schedule_seats', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('movie_schedule_id')->constrained()->onDelete('cascade');
-            $table->foreignId('seat_id')->constrained()->onDelete('cascade');
+            $table->uuid('movie_schedule_id');
+            $table->foreign('movie_schedule_id')->references('id')->on('movie_schedules')->onDelete('cascade');
+            $table->uuid('seat_id');
+            $table->foreign('seat_id')->references('id')->on('seats')->onDelete('cascade');
             $table->boolean('booked')->default(false);
             $table->timestamps();
         });

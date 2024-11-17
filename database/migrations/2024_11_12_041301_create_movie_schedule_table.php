@@ -11,13 +11,18 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('movie_schedules', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->date('date');
             $table->time('show_start');
             $table->time('show_end');
-            $table->foreignId('price_id')->constrained()->onDelete('cascade');
-            $table->foreignId('movie_id')->constrained()->onDelete('cascade');
-            $table->foreignId('auditorium_id')->constrained()->onDelete('cascade');
+
+            $table->uuid('price_id');
+            $table->foreign('price_id')->references('id')->on('prices')->onDelete('cascade');
+            $table->uuid('movie_id');
+            $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade');
+            $table->uuid('auditorium_id');
+            $table->foreign('auditorium_id')->references('id')->on('auditoria')->onDelete('cascade');
+
             $table->timestamps();
             $table->softDeletes();
         });
