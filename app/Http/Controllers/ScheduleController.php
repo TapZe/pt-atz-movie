@@ -16,8 +16,10 @@ class ScheduleController extends Controller
     {
         $schedule = MovieSchedule::with([
             'seat' => function ($query) {
-                $query->orderByRaw('CAST(SUBSTRING_INDEX(seat_code, "", 1) AS UNSIGNED)');
-                $query->orderByRaw('RIGHT(seat_code, 1)');
+                $query->orderByRaw('
+            SUBSTRING(seat_code, 1, 1),
+            CAST(SUBSTRING(seat_code, 2) AS UNSIGNED)
+        ');
             },
             'movie',
         ])->findOrFail($id);
