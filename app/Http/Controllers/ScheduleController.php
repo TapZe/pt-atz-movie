@@ -32,6 +32,7 @@ class ScheduleController extends Controller
 
     public function checkout(Request $request)
     {
+        session()->forget('promo_id');
         $request->validate([
             'seats' => 'required|array|min:1',
             'seats.*' => 'exists:seats,id',
@@ -54,7 +55,10 @@ class ScheduleController extends Controller
                 ->where('end_date', '>=', now())
                 ->first();
 
+
             if ($promo) {
+                session(['promo_id' => $promo->id]);
+
                 // Check if user has already used the promo code
                 $userUsedPromo = $promo->user()->wherePivot('user_id', auth()->id())->exists();
 
@@ -85,7 +89,7 @@ class ScheduleController extends Controller
             'totalPrice' => $totalPrice,
             'discount' => $discount,
             'finalPrice' => $finalPrice,
-            'message' => $message
+            'message' => $message,
         ]);
     }
 
@@ -125,6 +129,18 @@ class ScheduleController extends Controller
                 'payyed' => true,
                 'payment_id' => 1,
             ]);
+        }
+
+        // Promo used
+        if (session('promo_id') && auth()->check()) {
+            $promo = Promo::find(session('promo_id'));
+            $userId = auth()->id();
+
+            if ($promo) {
+                $promo->user()->updateExistingPivot($userId, [
+                    'used' => true
+                ]);
+            }
         }
 
         return redirect(route('profile.history'))->with([
