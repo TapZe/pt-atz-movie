@@ -22,20 +22,62 @@ class ScheduleController extends Controller
         ]);
     }
 
-    function checkout(Request $request)
+    public function checkout(Request $request)
     {
         $request->validate([
             'seats' => 'required|array|min:1',
             'seats.*' => 'exists:seats,id',
             'schedule_id' => 'required|exists:movie_schedules,id',
+            'promo_code' => 'nullable|string',
         ]);
 
+        $message = '';
         $schedule = MovieSchedule::with(['movie', 'auditorium.cinema', 'price'])->findOrFail($request->schedule_id);
         $seats = Seat::whereIn('id', $request->seats)->get();
+
+        // Default total price without discount
+        $totalPrice = count($seats) * $schedule->price->number;
+
+        $discount = 0;
+        if ($request->filled('promo_code')) {
+            // Check if promo code exists and is valid
+            $promo = Promo::where('code', $request->promo_code)
+                ->where('start_date', '<=', now())
+                ->where('end_date', '>=', now())
+                ->first();
+
+            if ($promo) {
+                // Check if user has already used the promo code
+                $userUsedPromo = $promo->user()->wherePivot('user_id', auth()->id())->exists();
+
+                if (!$userUsedPromo) {
+                    // Calculate discount based on promo type
+                    if ($promo->type === 'percentage') {
+                        $discount = $totalPrice * ($promo->discount / 100);
+                    } elseif ($promo->type === 'fixed') {
+                        $discount = $promo->discount;
+                    }
+
+                    // Ensure the discount does not exceed the total price
+                    $discount = min($discount, $totalPrice);
+                } else {
+                    $message = "You have already used this promo code!";
+                }
+            } else {
+                $message = 'Invalid promo code or expired.';
+            }
+        }
+
+        // Final price after discount
+        $finalPrice = $totalPrice - $discount;
 
         return view('schedule.checkout', [
             'seats' => $seats,
             'schedule' => $schedule,
+            'totalPrice' => $totalPrice,
+            'discount' => $discount,
+            'finalPrice' => $finalPrice,
+            'message' => $message
         ]);
     }
 

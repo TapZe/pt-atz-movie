@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('description')->nullable();
             $table->string('image')->nullable();
-            $table->string('code');
+            $table->string('code')->collation('utf8mb4_bin')->unique();
             $table->enum('type', ['percentage', 'fixed']);
             $table->string('discount');
             $table->date('start_date');

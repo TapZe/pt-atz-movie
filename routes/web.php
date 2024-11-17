@@ -28,7 +28,6 @@ Route::middleware(['auth', VerifyEmailMiddleware::class])->group(function () {
 
     // Ticket buying
     Route::post('/checkout', [ScheduleController::class, 'checkout'])->name('checkout');
-    // Route::post('/apply-promo', [PromoController::class, 'apply'])->name('apply.promo');
     Route::post('/book-seats', [ScheduleController::class, 'bookSeats'])->name('book.seats');
 });
 

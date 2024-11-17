@@ -52,15 +52,50 @@
             </ul>
         </div>
 
+        <!-- Promo Code -->
+        <div class="mb-10">
+            <h4 class="text-2xl font-semibold text-primary dark:text-primary-content mb-4">Promo Code</h4>
+
+            <!-- Promo Code Form -->
+            <form action="{{ route('checkout') }}" method="POST" class="flex items-center space-x-4">
+                @csrf
+                @method('POST')
+                <input type="text" name="promo_code" placeholder="Enter Promo Code"
+                    class="input input-bordered w-full max-w-xs dark:bg-gray-800 dark:text-white dark:border-gray-600"
+                    value="{{ old('promo_code') }}">
+                <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
+                @foreach ($seats as $seat)
+                    <input type="hidden" name="seats[]" value="{{ $seat->id }}">
+                @endforeach
+                <button type="submit" class="btn btn-primary dark:btn-secondary">
+                    Apply
+                </button>
+            </form>
+
+            <!-- Promo Code Applied / Error Message -->
+            @if ($discount)
+                <div class="mt-4 text-green-600 dark:text-green-400">
+                    Promo Applied: <strong>{{ session('promo_code') }}</strong>
+                    <br> Discount: Rp. {{ number_format($discount, 0, ',', '.') }}
+                </div>
+            @elseif(isset($message))
+                <div class="mt-4 text-red-600 dark:text-red-400">
+                    {{ $message }}
+                </div>
+            @endif
+        </div>
+
         <!-- Total Price -->
         <div class="mb-10 bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-md">
             <h4 class="text-2xl font-semibold text-primary dark:text-primary-content mb-4">Total Price</h4>
+
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-2">
                     <span class="text-gray-600 dark:text-gray-400 text-lg">Number of Seats:</span>
                 </div>
                 <span class="font-bold text-gray-800 dark:text-gray-200">{{ count($seats) }}</span>
             </div>
+
             <div class="flex items-center justify-between mt-2">
                 <div class="flex items-center space-x-2">
                     <span class="text-gray-600 dark:text-gray-400 text-lg">Price per Seat:</span>
@@ -68,13 +103,36 @@
                 <span class="font-bold text-gray-800 dark:text-gray-200">Rp.
                     {{ number_format($schedule->price->number, 0, ',', '.') }}</span>
             </div>
+
             <hr class="my-4 border-gray-300 dark:border-gray-700">
+
+            <!-- Before Discount (Original Total) -->
+            @if ($discount > 0)
+                <div class="flex items-center justify-between mt-2">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-gray-600 dark:text-gray-400 text-lg">Total Before Discount:</span>
+                    </div>
+                    <span class="font-bold text-gray-800 dark:text-gray-200">Rp.
+                        {{ number_format($totalPrice, 0, ',', '.') }}</span>
+                </div>
+
+                <!-- Show Discount if available -->
+                <div class="flex items-center justify-between mt-2">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-gray-600 dark:text-gray-400 text-lg">Discount:</span>
+                    </div>
+                    <span class="font-bold text-red-600 dark:text-red-400">- Rp.
+                        {{ number_format($discount, 0, ',', '.') }}</span>
+                </div>
+            @endif
+
+            <!-- Final Price -->
             <div class="flex items-center justify-between text-xl font-bold">
                 <div class="flex items-center space-x-2">
                     <span>Total:</span>
                 </div>
                 <span class="text-primary dark:text-primary-content">Rp.
-                    {{ number_format(count($seats) * $schedule->price->number, 0, ',', '.') }}</span>
+                    {{ number_format($finalPrice, 0, ',', '.') }}</span>
             </div>
         </div>
 
