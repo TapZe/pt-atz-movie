@@ -14,7 +14,12 @@ class ScheduleController extends Controller
 {
     function schedule(string $id)
     {
-        $schedule = MovieSchedule::with(['seat', 'movie'])->findOrFail($id);
+        $schedule = MovieSchedule::with([
+            'seat' => function ($query) {
+                $query->orderBy('seat_code');
+            },
+            'movie',
+        ])->findOrFail($id);
 
         return view('schedule.detail', [
             'movie' => $schedule->movie,
