@@ -16,7 +16,10 @@ return new class extends Migration {
             $table->foreign('movie_schedule_id')->references('id')->on('movie_schedules')->onDelete('cascade');
             $table->uuid('seat_id');
             $table->foreign('seat_id')->references('id')->on('seats')->onDelete('cascade');
-            $table->boolean('booked')->default(false);
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            $table->boolean('payyed')->default(false);
+            $table->boolean('arrived')->default(false);
+            $table->string('payment_id', 100)->nullable();
             $table->timestamps();
         });
     }

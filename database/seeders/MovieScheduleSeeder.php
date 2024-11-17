@@ -55,7 +55,7 @@ class MovieScheduleSeeder extends Seeder
                         $showEnd = $this->roundToNextFiveMinutes($currentOpenTime->copy()->addMinutes($movies[$movieIndex]->runtime));
 
                         // Determine price based on weekday/weekend (this is the default)
-                        $priceId = $prices[(int) $date->isWeekday()]->id;
+                        $priceId = $prices[$date->isWeekday() ? 0 : 1]->id;
 
                         $created = MovieSchedule::create([
                             'date' => $date->toDateString(),

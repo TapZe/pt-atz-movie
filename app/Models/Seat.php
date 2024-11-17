@@ -17,17 +17,4 @@ class Seat extends Model
      * @var array
      */
     protected $fillable = ['seat_code'];
-
-    /**
-     * The movieSchedule that belong to the Seat
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function movieSchedule(): BelongsToMany
-    {
-        return $this->belongsToMany(MovieSchedule::class, 'movie_schedule_seats')
-            ->using(MovieScheduleSeat::class)
-            ->withPivot('booked')
-            ->withTimestamps();
-    }
 }

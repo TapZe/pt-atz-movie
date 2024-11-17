@@ -105,7 +105,7 @@
                                         <div class="grid grid-cols-5">
                                     @endif
                                     <div class="flex justify-center items-center">
-                                        @if ($seat->pivot->booked)
+                                        @if (!is_null($seat->pivot->user_id))
                                             <span class="btn btn-sm btn-error">{{ $seat->seat_code }}</span>
                                         @else
                                             <label for="seat_{{ $seat->id }}" class="cursor-pointer">

@@ -22,7 +22,10 @@ class HomeController extends Controller
         $distinctMovieIds = MovieSchedule::whereBetween('date', [Carbon::now()->addDays(-1), Carbon::now()->addDays(7)])
             ->pluck('movie_id')
             ->unique();
-        $movies = Movie::with(['genre'])->whereIn('id', $distinctMovieIds)->orderByDesc('release_date')->get();
+        $movies = Movie::with(['genre'])
+            ->whereIn('id', $distinctMovieIds)
+            ->orderByDesc('release_date')
+            ->get();
 
 
         return view('welcome', [
@@ -37,6 +40,13 @@ class HomeController extends Controller
         $movie = Movie::with('genre')->findOrFail($id);
         $schedule = MovieSchedule::with(['auditorium.cinema'])
             ->whereBetween('date', [Carbon::now()->addDays(-1), Carbon::now()->addDays(7)])
+            ->where(function ($query) {
+                $query->where('date', '!=', Carbon::now()->toDateString())
+                    ->orWhere(function ($query) {
+                        $query->where('date', Carbon::now()->toDateString())
+                            ->where('show_start', '>', Carbon::now());
+                    });
+            })
             ->where('movie_id', $id)
             ->orderBy('date')
             ->get();
@@ -55,9 +65,15 @@ class HomeController extends Controller
             },
             'auditorium.movieSchedule' => function ($query) {
                 $query->orderBy('date')->orderBy('show_start');
-                $query->whereBetween('date', [Carbon::now()->addDays(-1), Carbon::now()->addDays(7)]);
+                $query->whereBetween('date', [Carbon::now()->addDays(-1), Carbon::now()->addDays(7)])
+                    ->where(function ($query) {
+                        $query->where('date', '!=', Carbon::now()->toDateString())
+                            ->orWhere(function ($query) {
+                                $query->where('date', Carbon::now()->toDateString())
+                                    ->where('show_start', '>', Carbon::now());
+                            });
+                    });
             },
-            'auditorium.movieSchedule.movie'
         ])->findOrFail($id);
 
         return view('cinema.detail', [

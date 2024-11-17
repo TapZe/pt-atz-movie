@@ -56,26 +56,33 @@
         <div class="mb-10 bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-md">
             <h4 class="text-2xl font-semibold text-primary dark:text-primary-content mb-4">Total Price</h4>
             <div class="flex items-center justify-between">
-                <span class="text-gray-600 dark:text-gray-400 text-lg">Number of Seats:</span>
+                <div class="flex items-center space-x-2">
+                    <span class="text-gray-600 dark:text-gray-400 text-lg">Number of Seats:</span>
+                </div>
                 <span class="font-bold text-gray-800 dark:text-gray-200">{{ count($seats) }}</span>
             </div>
             <div class="flex items-center justify-between mt-2">
-                <span class="text-gray-600 dark:text-gray-400 text-lg">Price per Seat:</span>
+                <div class="flex items-center space-x-2">
+                    <span class="text-gray-600 dark:text-gray-400 text-lg">Price per Seat:</span>
+                </div>
                 <span class="font-bold text-gray-800 dark:text-gray-200">Rp.
                     {{ number_format($schedule->price->number, 0, ',', '.') }}</span>
             </div>
             <hr class="my-4 border-gray-300 dark:border-gray-700">
             <div class="flex items-center justify-between text-xl font-bold">
-                <span>Total:</span>
+                <div class="flex items-center space-x-2">
+                    <span>Total:</span>
+                </div>
                 <span class="text-primary dark:text-primary-content">Rp.
                     {{ number_format(count($seats) * $schedule->price->number, 0, ',', '.') }}</span>
             </div>
         </div>
 
         <!-- Proceed to Payment -->
-        <form action="{{ route('book.seats', $schedule->movie_id) }}" method="POST" class="mt-6">
+        <form action="{{ route('book.seats') }}" method="POST" class="mt-6">
             @csrf
-            <!-- Pass selected seats to the booking process -->
+
+            <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
             @foreach ($seats as $seat)
                 <input type="hidden" name="seats[]" value="{{ $seat->id }}">
             @endforeach

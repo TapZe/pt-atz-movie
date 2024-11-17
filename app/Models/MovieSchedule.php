@@ -55,7 +55,7 @@ class MovieSchedule extends Model
     {
         return $this->belongsToMany(Seat::class, 'movie_schedule_seats')
             ->using(MovieScheduleSeat::class)
-            ->withPivot('booked')
+            ->withPivot(['user_id', 'payyed', 'arrived', 'payment_id'])
             ->withTimestamps();
     }
 

@@ -63,13 +63,13 @@ class User extends Authenticatable
     }
 
     /**
-     * Get all of the movieTicket for the User
+     * Get all of the ticket for the User
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function movieTicket(): HasMany
+    public function ticket(): HasMany
     {
-        return $this->hasMany(MovieTicket::class);
+        return $this->hasMany(MovieScheduleSeat::class);
     }
 
     /**
