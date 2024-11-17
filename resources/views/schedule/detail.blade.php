@@ -19,9 +19,9 @@
     <div class="font-sans antialiased p-6 max-w-7xl mx-auto">
         <!-- Back to Home Button -->
         <div class="mb-6">
-            <a href="{{ route('welcome') }}"
+            <a href="{{ route('movie.detail', ['id' => $movie->id]) }}"
                 class="btn btn-outline btn-primary dark:btn-secondary shadow-md hover:scale-105 transform transition-transform">
-                ← Back to Home Page
+                ← Back to Movie Details
             </a>
         </div>
 
@@ -95,6 +95,7 @@
                     <h4 class="text-2xl font-semibold text-primary dark:text-primary-content mb-4">Seats</h4>
                     <form action="{{ route('checkout') }}" method="POST">
                         @csrf
+                        @method('POST')
                         <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
                         <div class="overflow-x-scroll p-5">
                             <div class="grid grid-cols-4 gap-x-4 md:gap-x-8 gap-y-2 min-w-max xl:min-w-full">
@@ -152,8 +153,6 @@
     </div>
     </div>
     @endif
-
-
     </div>
 
     <!-- Footer -->

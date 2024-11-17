@@ -25,13 +25,16 @@ class ScheduleController extends Controller
         $request->validate([
             'seats' => 'required|array|min:1',
             'seats.*' => 'exists:seats,id',
-            'schedule_id' => 'required|integer',
+            'schedule_id' => 'required',
         ]);
 
-        $schedule = MovieSchedule::with(['movie', 'auditorium', 'price'])->findOrFail($request->schedule_id);
+        $schedule = MovieSchedule::with(['movie', 'auditorium.cinema', 'price'])->findOrFail($request->schedule_id);
         $seats = Seat::whereIn('id', $request->seats)->get();
 
-        return view('checkout', compact('seats', 'movie'));
+        return view('schedule.checkout', [
+            'seats' => $seats,
+            'schedule' => $schedule,
+        ]);
     }
 
     function bookSeats(Request $request, string $id)
