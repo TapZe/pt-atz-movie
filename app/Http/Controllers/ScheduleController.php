@@ -101,6 +101,22 @@ class ScheduleController extends Controller
             'schedule_id' => 'required|exists:movie_schedules,id',
         ]);
 
+        // Promo used
+        if (session('promo_id') && auth()->check()) {
+            $promo = Promo::find(session('promo_id'));
+            $userId = auth()->id();
+
+            if ($promo) {
+                if (!$promo->user()->wherePivot('user_id', $userId)->exists()) {
+                    $promo->user()->attach($userId);
+                }
+                $promo->user()->updateExistingPivot($userId, [
+                    'used' => true
+                ]);
+            }
+        }
+
+
         $schedule = MovieSchedule::with([
             'movie',
             'auditorium.cinema',
@@ -129,18 +145,6 @@ class ScheduleController extends Controller
                 'payyed' => true,
                 'payment_id' => 1,
             ]);
-        }
-
-        // Promo used
-        if (session('promo_id') && auth()->check()) {
-            $promo = Promo::find(session('promo_id'));
-            $userId = auth()->id();
-
-            if ($promo) {
-                $promo->user()->updateExistingPivot($userId, [
-                    'used' => true
-                ]);
-            }
         }
 
         return redirect(route('profile.history'))->with([
