@@ -99,13 +99,13 @@
                         <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
                         <div class="overflow-x-scroll p-5">
                             <div class="grid grid-cols-4 gap-x-4 md:gap-x-8 gap-y-2 min-w-max xl:min-w-full">
-                                @foreach ($schedule->seat as $index => $seat)
+                                @foreach ($seats as $index => $seat)
                                     <!-- Start a new row every 5 seats -->
                                     @if ($index % 5 == 0)
                                         <div class="grid grid-cols-5">
                                     @endif
                                     <div class="flex justify-center items-center">
-                                        @if (!is_null($seat->pivot->user_id))
+                                        @if ($schedule->seat()->wherePivot('seat_id', $seat->id)->wherePivot('user_id', '!=', null)->exists())
                                             <span class="btn btn-sm btn-error">{{ $seat->seat_code }}</span>
                                         @else
                                             <label for="seat_{{ $seat->id }}" class="cursor-pointer">

@@ -25,7 +25,7 @@ class MovieScheduleSeeder extends Seeder
         $auditoria = Auditorium::with('cinema')->get();
         $movieCount = count($movies);
         $gap = 30; // Gap time in minutes
-        $seats = Seat::all();
+        // $seats = Seat::all();
         $prices = Price::all();
 
         DB::beginTransaction();
@@ -65,7 +65,7 @@ class MovieScheduleSeeder extends Seeder
                             'movie_id' => $movies[$movieIndex]->id,
                             'auditorium_id' => $aud->id,
                         ]);
-                        $created->seat()->sync($seats);
+                        // $created->seat()->sync($seats);
 
                         // Move openTime forward by runtime + gap, then round to the next five minutes
                         $currentOpenTime->addMinutes($movies[$movieIndex]->runtime + $gap);

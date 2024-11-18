@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Movie;
 use App\Models\MovieSchedule;
-use App\Models\MovieScheduleSeat;
 use App\Models\Promo;
 use App\Models\Seat;
 use Illuminate\Http\Request;
-use Schedule;
 
 class ScheduleController extends Controller
 {
@@ -23,10 +20,15 @@ class ScheduleController extends Controller
             },
             'movie',
         ])->findOrFail($id);
+        $seats = Seat::orderByRaw('
+            SUBSTRING(seat_code, 1, 1),
+            CAST(SUBSTRING(seat_code, 2) AS UNSIGNED)
+        ')->get();
 
         return view('schedule.detail', [
             'movie' => $schedule->movie,
             'schedule' => $schedule,
+            'seats' => $seats,
         ]);
     }
 
@@ -116,7 +118,6 @@ class ScheduleController extends Controller
             }
         }
 
-
         $schedule = MovieSchedule::with([
             'movie',
             'auditorium.cinema',
@@ -139,6 +140,9 @@ class ScheduleController extends Controller
         }
 
         foreach ($request->seats as $seatId) {
+            if (!$schedule->seat()->wherePivot('seat_id', $seatId)->exists()) {
+                $schedule->seat()->attach($seatId);
+            }
             $schedule->seat()->updateExistingPivot($seatId, [
                 'user_id' => Auth()->id(),
                 // for future if there is a payment gateway
