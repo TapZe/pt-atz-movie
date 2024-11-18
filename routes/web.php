@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\AuditoriumController;
+use App\Http\Controllers\CinemaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MovieScheduleController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PromoController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\VerifyEmailMiddleware;
@@ -17,6 +19,9 @@ Route::get('/schedule/{id}', [ScheduleController::class, 'schedule'])->name('sch
 Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::patch('/booking/{id}/arrive', [DashboardController::class, 'arrive'])->name('booking.arrive');
+    Route::resource('cinema', CinemaController::class)->only(['index'])->names('cinema');
+    Route::resource('auditorium', AuditoriumController::class)->only(['index'])->names('auditorium');
+    Route::resource('schedule', MovieScheduleController::class)->only(['index'])->names('movie.schedule');
 });
 
 Route::middleware(['auth', VerifyEmailMiddleware::class])->group(function () {

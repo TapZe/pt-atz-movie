@@ -15,6 +15,21 @@
                             {{ __('Dashboard') }}
                         </x-nav-link>
                     </div>
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('cinema.index')" :active="request()->routeIs('cinema.index')">
+                            {{ __('Cinema') }}
+                        </x-nav-link>
+                    </div>
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('auditorium.index')" :active="request()->routeIs('auditorium.index')">
+                            {{ __('Auditorium') }}
+                        </x-nav-link>
+                    </div>
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('movie.schedule.index')" :active="request()->routeIs('movie.schedule.index')">
+                            {{ __('Movie Schedule') }}
+                        </x-nav-link>
+                    </div>
                 @else
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('welcome')">

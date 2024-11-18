@@ -8,17 +8,17 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @if (session('success'))
-                <div class="bg-green-500 text-white p-4 rounded-lg mb-4">
+                <div class="alert alert-success p-4 rounded-lg mb-4">
                     {{ session('success') }}
                 </div>
             @endif
 
             <div class="bg-white dark:bg-gray-800 shadow-lg sm:rounded-lg overflow-hidden">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-200">Tabel Booking</h3>
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-200">Booking Table</h3>
 
                     @if ($bookings->isEmpty())
-                        <p class="text-gray-600 dark:text-gray-400">Tidak ada data booking</p>
+                        <p class="text-gray-600 dark:text-gray-400">Currently, there is no booking data available.</p>
                     @else
                         <!-- Loop through cinemas -->
                         @foreach ($bookings as $cinemaName => $cinemaGroup)
@@ -44,19 +44,19 @@
                                                             <tr>
                                                                 <th
                                                                     class="px-4 py-2 text-left text-sm font-medium text-gray-600 dark:text-gray-200">
-                                                                    Nama Pelanggan
+                                                                    Customer Name
                                                                 </th>
                                                                 <th
                                                                     class="px-4 py-2 text-left text-sm font-medium text-gray-600 dark:text-gray-200">
-                                                                    Tanggal
+                                                                    Date
                                                                 </th>
                                                                 <th
                                                                     class="px-4 py-2 text-left text-sm font-medium text-gray-600 dark:text-gray-200">
-                                                                    Waktu Tayang
+                                                                    Show Time
                                                                 </th>
                                                                 <th
                                                                     class="px-4 py-2 text-left text-sm font-medium text-gray-600 dark:text-gray-200">
-                                                                    Nomor Kursi
+                                                                    Seat Number
                                                                 </th>
                                                                 <th
                                                                     class="px-4 py-2 text-left text-sm font-medium text-gray-600 dark:text-gray-200">
